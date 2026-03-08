@@ -1,4 +1,4 @@
-1.Change the Postgre Setting to your database settings
+1.Change the Postgre Setting to your database settings and create a new database "minibank"
 2.Run the SpringbootApplication
 3.Create Roles in roles table using query : INSERT INTO roles(role_name) VALUES ('ROLE_MANAGER');
 INSERT INTO roles(role_name) VALUES ('ROLE_EMPLOYEE');
