@@ -22,7 +22,7 @@ public class ManagerController {
         return userService.createEmployee(user);
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
+   @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/employees")
     public List<UserEntity> getEmployees()
     {

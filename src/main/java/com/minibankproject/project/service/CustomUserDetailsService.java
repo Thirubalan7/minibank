@@ -3,6 +3,7 @@ package com.minibankproject.project.service;
 import com.minibankproject.project.entity.UserEntity;
 import com.minibankproject.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,14 @@ public class CustomUserDetailsService implements UserDetailsService {
             storedPassword = "{noop}" + storedPassword;
         }
 
+        GrantedAuthority authority =
+                new SimpleGrantedAuthority(user.getRole().getRoleName().name());
+
+
         return new User(
                 user.getEmail(),
                 storedPassword,
-                List.of(new SimpleGrantedAuthority(user.getRole().getRoleName().name()))
+                List.of(authority)
         );
     }
 }

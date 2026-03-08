@@ -21,12 +21,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableMethodSecurity
+ @EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
+   @Autowired
     private JwtFilter jwtFilter;
 
     @Bean
@@ -46,16 +46,16 @@ public class SecurityConfig {
 
         http.csrf(csrf->csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth->auth.
+               .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+               .authorizeHttpRequests(auth->auth.
                         requestMatchers("/error").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .requestMatchers("/manager/**").hasRole("MANAGER")
                                 .requestMatchers("/employee/**").hasRole("EMPLOYEE")
                                 .requestMatchers("/user/**").hasRole("USER")
-                                .requestMatchers("/transactions/**").authenticated()
-                                .anyRequest().authenticated()
+                               .requestMatchers("/transactions/**").authenticated()
+
                         ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 return http.build();

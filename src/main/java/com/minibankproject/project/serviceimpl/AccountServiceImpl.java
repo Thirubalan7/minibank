@@ -1,14 +1,15 @@
-package com.minibankproject.project.service;
+package com.minibankproject.project.serviceimpl;
 
 import com.minibankproject.project.entity.AccountEntity;
 import com.minibankproject.project.repository.AccountRepository;
+import com.minibankproject.project.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;

@@ -1,4 +1,4 @@
-package com.minibankproject.project.service;
+package com.minibankproject.project.serviceimpl;
 
 import com.minibankproject.project.dto.TransferRequest;
 import com.minibankproject.project.entity.AccountEntity;
@@ -6,6 +6,7 @@ import com.minibankproject.project.entity.TransactionEntity;
 import com.minibankproject.project.kafka.TransactionProducer;
 import com.minibankproject.project.repository.AccountRepository;
 import com.minibankproject.project.repository.TransactionRepository;
+import com.minibankproject.project.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -29,16 +30,16 @@ public class TransactionServiceImpl implements TransactionService {
     private AccountRepository accountRepository;
 
     @Override
-    @Transactional
     public void deposit(Long accountId,Double amount){
-        requirePositiveAmount(amount);
-        String email = currentUserEmail();
+
+        System.out.println("inside");
+
 
         AccountEntity account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
-        assertOwner(account, email);
 
-        account.setBalance(safe(account.getBalance()) + amount);
+
+
         accountRepository.save(account);
 
         TransactionEntity tx = new TransactionEntity();
@@ -55,12 +56,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public void withdraw(Long accountId,Double amount){
-        requirePositiveAmount(amount);
-        String email = currentUserEmail();
+
+
 
         AccountEntity account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
-        assertOwner(account, email);
+
 
         double newBalance = safe(account.getBalance()) - amount;
         if (newBalance < 0) {
@@ -145,7 +146,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionEntity> getTransactionsByUser(Long userId){
 
-        return transactionRepository.findByAccountUserId(userId);
+        return transactionRepository.findByAccount_User_Id(userId);
 
     }
 

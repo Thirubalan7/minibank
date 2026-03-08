@@ -1,10 +1,11 @@
-package com.minibankproject.project.service;
+package com.minibankproject.project.serviceimpl;
 
 import com.minibankproject.project.entity.RoleEntity;
 import com.minibankproject.project.entity.UserEntity;
 import com.minibankproject.project.enums.RoleType;
 import com.minibankproject.project.repository.RoleRepository;
 import com.minibankproject.project.repository.UserRepository;
+import com.minibankproject.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

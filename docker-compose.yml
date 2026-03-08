@@ -5,7 +5,7 @@ services:
     hostname: zookeeper
     container_name: zookeeper3
     ports:
-      - "2181:2181"
+      - "22181:22181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 3000

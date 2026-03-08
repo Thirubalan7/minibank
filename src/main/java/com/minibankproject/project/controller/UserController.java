@@ -1,5 +1,6 @@
 package com.minibankproject.project.controller;
 
+import com.minibankproject.project.dto.TransferRequest;
 import com.minibankproject.project.entity.AccountEntity;
 import com.minibankproject.project.entity.TransactionEntity;
 import com.minibankproject.project.entity.UserEntity;
@@ -9,9 +10,8 @@ import com.minibankproject.project.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class UserController {
 
     @Autowired
     private TransactionService transactionService;
-
+ 
     @Autowired
     private UserRepository userRepository;
 
@@ -44,5 +44,26 @@ public class UserController {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return transactionService.getTransactionsByUser(user.getId());
+    }
+
+   @PreAuthorize("hasRole('USER')")
+    @PostMapping("/deposit")
+    public String deposit(@RequestParam Long accountId, @RequestParam Double amount) {
+        transactionService.deposit(accountId, amount);
+        return "Deposit successful";
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/withdraw")
+    public String withdraw(@RequestParam Long accountId, @RequestParam Double amount) {
+        transactionService.withdraw(accountId, amount);
+        return "Withdraw successful";
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/transfer")
+    public String transfer(@RequestBody TransferRequest request, Authentication authentication) {
+        transactionService.transfer(request);
+        return "Transfer successful";
     }
 }
