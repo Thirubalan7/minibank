@@ -12,7 +12,7 @@ VALUES ('employee','employee@gmail.com','123456',2);
 INSERT INTO users(username,email,password,role_id)
 VALUES ('john','john@gmail.com','123456',3);
 
-5.After Starting the application the Swagger UI will be available at:http://localhost:8080/swagger-ui/index.html
+5.After Starting the application the Swagger UI will be available at:http://localhost:8084/swagger-ui/index.html
 
 6.In POST/auth/login enter { "email": "manager@gmail.com",
   "password": "123456" } to generate a token, use that token to access API's
