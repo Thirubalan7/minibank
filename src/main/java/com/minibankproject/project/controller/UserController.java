@@ -8,6 +8,7 @@ import com.minibankproject.project.repository.UserRepository;
 import com.minibankproject.project.service.AccountService;
 import com.minibankproject.project.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,8 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/accounts/me")
+    @PreAuthorize("hasAnyRole('USER','MANAGER')")
+    @GetMapping("/accounts/users")
     public List<AccountEntity> myAccounts(Authentication authentication){
         String email = authentication.getName();
         UserEntity user = userRepository.findByEmail(email)
@@ -48,22 +49,25 @@ public class UserController {
 
    @PreAuthorize("hasRole('USER')")
     @PostMapping("/deposit")
-    public String deposit(@RequestParam Long accountId, @RequestParam Double amount) {
+    public ResponseEntity<String>  deposit(@RequestParam Long accountId, @RequestParam Double amount) {
         transactionService.deposit(accountId, amount);
-        return "Deposit successful";
+
+       return ResponseEntity.ok("Deposit successful");
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/withdraw")
-    public String withdraw(@RequestParam Long accountId, @RequestParam Double amount) {
+    public ResponseEntity<String> withdraw(@RequestParam Long accountId, @RequestParam Double amount) {
         transactionService.withdraw(accountId, amount);
-        return "Withdraw successful";
+
+        return ResponseEntity.ok("Withdraw successful");
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/transfer")
-    public String transfer(@RequestBody TransferRequest request, Authentication authentication) {
+    public ResponseEntity<String> transfer(@RequestBody TransferRequest request) {
         transactionService.transfer(request);
-        return "Transfer successful";
+
+        return ResponseEntity.ok("Deposit successful");
     }
 }

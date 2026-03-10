@@ -66,7 +66,7 @@ public class JwtFilter extends OncePerRequestFilter {
                             return;
                         }
                     } catch (Exception ignored) {
-                        // If Redis is down, don't block requests (best-effort enforcement)
+
                     }
                 }
 

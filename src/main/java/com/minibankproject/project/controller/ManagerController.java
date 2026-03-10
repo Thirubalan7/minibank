@@ -3,6 +3,8 @@ package com.minibankproject.project.controller;
 import com.minibankproject.project.entity.UserEntity;
 import com.minibankproject.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,15 +26,17 @@ public class ManagerController {
 
    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/employees")
-    public List<UserEntity> getEmployees()
+    public ResponseEntity<List<UserEntity>> getEmployees()
     {
-        return userService.getEmployees();
+
+       return ResponseEntity.ok(userService.getEmployees());
     }
 
     @PreAuthorize("hasRole('MANAGER')")
     @PostMapping("/users")
-    public UserEntity createUser(@RequestBody UserEntity user)
+    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user)
     {
-        return userService.createUser(user);
+        UserEntity userEntity= userService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userEntity);
     }
 }

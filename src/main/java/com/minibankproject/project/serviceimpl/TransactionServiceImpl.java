@@ -32,22 +32,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void deposit(Long accountId,Double amount){
 
-        System.out.println("inside");
-
 
         AccountEntity account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-
+        account.setBalance(account.getBalance() + amount);
 
         accountRepository.save(account);
 
-        TransactionEntity tx = new TransactionEntity();
-        tx.setAccount(account);
-        tx.setAmount(amount);
-        tx.setType("DEPOSIT");
-        tx.setTransactionDate(LocalDateTime.now());
-        transactionRepository.save(tx);
 
         producer.sendTransaction(accountId, amount, "DEPOSIT");
 
@@ -62,21 +54,14 @@ public class TransactionServiceImpl implements TransactionService {
         AccountEntity account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-
-        double newBalance = safe(account.getBalance()) - amount;
-        if (newBalance < 0) {
-            throw new IllegalArgumentException("Insufficient funds");
+        if(account.getBalance() < amount){
+            throw new RuntimeException("Insufficient balance");
         }
 
-        account.setBalance(newBalance);
-        accountRepository.save(account);
 
-        TransactionEntity tx = new TransactionEntity();
-        tx.setAccount(account);
-        tx.setAmount(amount);
-        tx.setType("WITHDRAW");
-        tx.setTransactionDate(LocalDateTime.now());
-        transactionRepository.save(tx);
+        account.setBalance(account.getBalance() - amount);
+
+        accountRepository.save(account);
 
         producer.sendTransaction(accountId, amount, "WITHDRAW");
 
@@ -97,14 +82,14 @@ public class TransactionServiceImpl implements TransactionService {
             throw new IllegalArgumentException("fromAccountId and toAccountId must be different");
         }
 
-        String email = currentUserEmail();
+
 
         AccountEntity from = accountRepository.findById(request.getFromAccountId())
                 .orElseThrow(() -> new RuntimeException("From account not found"));
         AccountEntity to = accountRepository.findById(request.getToAccountId())
                 .orElseThrow(() -> new RuntimeException("To account not found"));
 
-        assertOwner(from, email);
+
 
         double newFromBalance = safe(from.getBalance()) - request.getAmount();
         if (newFromBalance < 0) {

@@ -4,6 +4,8 @@ package com.minibankproject.project.controller;
 import com.minibankproject.project.entity.AccountEntity;
 import com.minibankproject.project.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +21,11 @@ public class EmployeeController {
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("/account")
-    public AccountEntity createAccount(@RequestBody AccountEntity account)
+    public ResponseEntity<AccountEntity> createAccount(@RequestBody AccountEntity account)
     {
-       return accountService.createAccount(account);
+        AccountEntity accountEntity=accountService.createAccount(account);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(accountEntity);
     }
 
 }
