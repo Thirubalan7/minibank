@@ -17,6 +17,7 @@ public class AccountEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "account_number", unique = true)
     private Long accountNumber;
 
     private Double balance;

@@ -84,9 +84,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 
 
-        AccountEntity from = accountRepository.findById(request.getFromAccountId())
+        AccountEntity from = accountRepository.findByAccountNumber(request.getFromAccountId())
                 .orElseThrow(() -> new RuntimeException("From account not found"));
-        AccountEntity to = accountRepository.findById(request.getToAccountId())
+        AccountEntity to = accountRepository.findByAccountNumber(request.getToAccountId())
                 .orElseThrow(() -> new RuntimeException("To account not found"));
 
 

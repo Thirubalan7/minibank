@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -17,7 +18,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountEntity createAccount(AccountEntity account){
 
+        Optional<AccountEntity> existing =
+                accountRepository.findByAccountNumber(account.getAccountNumber());
 
+        if(existing.isPresent()){
+            throw new RuntimeException("Account number already exists");
+        }
         return accountRepository.save(account);
 
     }
