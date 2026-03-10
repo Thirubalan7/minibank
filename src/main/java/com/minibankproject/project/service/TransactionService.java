@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface TransactionService {
 
-    void deposit(Long accountId,Double amount);
+    void deposit(Long accountNumber,Double amount);
 
-    void withdraw(Long accountId,Double amount);
+    void withdraw(Long accountNumber,Double amount);
 
     void transfer(TransferRequest request);
 

@@ -12,9 +12,9 @@ public class TransactionProducer {
 
     private static final String TOPIC = "bank-transactions";
 
-    public void sendTransaction(Long accountId, Double amount, String type)
+    public void sendTransaction(Long accountNumber, Double amount, String type)
     {
-        String message = accountId + "," + amount + "," + type;
+        String message = accountNumber + "," + amount + "," + type;
 
         kafkaTemplate.send(TOPIC, message);
 

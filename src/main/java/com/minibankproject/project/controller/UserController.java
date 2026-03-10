@@ -21,22 +21,12 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private TransactionService transactionService;
  
     @Autowired
     private UserRepository userRepository;
 
-    @PreAuthorize("hasAnyRole('USER','MANAGER')")
-    @GetMapping("/accounts/users")
-    public List<AccountEntity> myAccounts(Authentication authentication){
-        String email = authentication.getName();
-        UserEntity user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return accountService.getAccountsByUser(user.getId());
-    }
+
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/transactions/me")

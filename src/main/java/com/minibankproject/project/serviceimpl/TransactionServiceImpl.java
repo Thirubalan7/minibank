@@ -30,10 +30,10 @@ public class TransactionServiceImpl implements TransactionService {
     private AccountRepository accountRepository;
 
     @Override
-    public void deposit(Long accountId,Double amount){
+    public void deposit(Long accountNumber,Double amount){
 
 
-        AccountEntity account = accountRepository.findById(accountId)
+        AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
         account.setBalance(account.getBalance() + amount);
@@ -41,29 +41,29 @@ public class TransactionServiceImpl implements TransactionService {
         accountRepository.save(account);
 
 
-        producer.sendTransaction(accountId, amount, "DEPOSIT");
+        producer.sendTransaction(accountNumber, amount, "DEPOSIT");
 
     }
 
-    @Override
+
     @Transactional
-    public void withdraw(Long accountId,Double amount){
+    public void withdraw(Long accountNumber,Double amount){
 
 
 
-        AccountEntity account = accountRepository.findById(accountId)
+        AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
         if(account.getBalance() < amount){
             throw new RuntimeException("Insufficient balance");
         }
-
+        //update only the balance in db
 
         account.setBalance(account.getBalance() - amount);
 
         accountRepository.save(account);
 
-        producer.sendTransaction(accountId, amount, "WITHDRAW");
+        producer.sendTransaction(accountNumber, amount, "WITHDRAW");
 
     }
 

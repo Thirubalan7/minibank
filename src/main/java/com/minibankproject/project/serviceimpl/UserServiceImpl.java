@@ -1,8 +1,10 @@
 package com.minibankproject.project.serviceimpl;
 
+import com.minibankproject.project.entity.AccountEntity;
 import com.minibankproject.project.entity.RoleEntity;
 import com.minibankproject.project.entity.UserEntity;
 import com.minibankproject.project.enums.RoleType;
+import com.minibankproject.project.repository.AccountRepository;
 import com.minibankproject.project.repository.RoleRepository;
 import com.minibankproject.project.repository.UserRepository;
 import com.minibankproject.project.service.UserService;
@@ -16,6 +18,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -24,8 +28,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public UserEntity getUserByAccountNumber(Long accountNumber) {
+
+        AccountEntity account = accountRepository
+                .findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        return account.getUser();
+    }
     @Override
     public UserEntity createUser(UserEntity user) {
+
 
         RoleEntity role = roleRepository
                 .findByRoleName(RoleType.ROLE_USER)

@@ -28,14 +28,14 @@ public class TransactionConsumer {
 
             String[] data = message.split(",");
 
-            Long accountId = Long.parseLong(data[0]);
+            Long accountNumber = Long.parseLong(data[0]);
             Double amount = Double.parseDouble(data[1]);
             String type = data[2];
 
-            AccountEntity account = accountRepository.findById(accountId)
+            AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
                     .orElseThrow(() -> new RuntimeException("Account not found"));
 
-            // ONLY SAVE TRANSACTION HISTORY
+            //save transaction
 
             TransactionEntity tx = new TransactionEntity();
             tx.setAccount(account);

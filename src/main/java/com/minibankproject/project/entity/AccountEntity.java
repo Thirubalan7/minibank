@@ -17,7 +17,7 @@ public class AccountEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String accountNumber;
+    private Long accountNumber;
 
     private Double balance;
 
