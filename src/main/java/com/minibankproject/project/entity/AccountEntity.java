@@ -20,10 +20,12 @@ public class AccountEntity {
     @Column(name = "account_number", unique = true)
     private Long accountNumber;
 
+    @Column(nullable = false)
     private Double balance;
 
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",nullable = false)
     private UserEntity user;
 
 }
