@@ -42,6 +42,14 @@ public class ManagerController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return accountService.getAccountsByUser(user.getId());
     }
+
+    @PreAuthorize("hasRole('MANAGER')")
+    @GetMapping("/users/all")
+    public ResponseEntity<List<UserEntity>> getUsers()
+    {
+
+        return ResponseEntity.ok(userService.getUsers());
+    }
    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/employees")
     public ResponseEntity<List<UserEntity>> getEmployees()

@@ -72,4 +72,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByRole_RoleName(RoleType.ROLE_EMPLOYEE);
 
     }
+
+    @Override
+    public List<UserEntity> getUsers() {
+
+        return userRepository.findByRole_RoleName(RoleType.ROLE_USER);
+
+    }
 }

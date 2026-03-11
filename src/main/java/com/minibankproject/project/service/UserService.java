@@ -13,4 +13,6 @@ public interface UserService {
     List<UserEntity> getEmployees();
 
 
+    List<UserEntity> getUsers();
+
 }
