@@ -8,16 +8,20 @@ import org.springframework.stereotype.Service;
 public class TransactionProducer {
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, TransactionEvent> kafkaTemplate;
 
     private static final String TOPIC = "bank-transactions";
 
     public void sendTransaction(Long accountNumber, Double amount, String type)
     {
-        String message = accountNumber + "," + amount + "," + type;
 
-        kafkaTemplate.send(TOPIC, message);
+        TransactionEvent event = new TransactionEvent();
+        event.setAccountNumber(accountNumber);
+        event.setAmount(amount);
+        event.setType(type);
 
-        System.out.println("Transaction event sent to Kafka: " + message);
+        kafkaTemplate.send(TOPIC, event);
+
+        System.out.println("Transaction event sent to Kafka: " + event);
     }
 }

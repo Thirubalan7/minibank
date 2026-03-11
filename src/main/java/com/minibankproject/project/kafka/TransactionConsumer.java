@@ -20,35 +20,21 @@ public class TransactionConsumer {
     private TransactionRepository transactionRepository;
 
     @KafkaListener(topics = "bank-transactions", groupId = "bank-group")
-    public void consume(String message) {
+    public void consume(TransactionEvent event) {
 
-        System.out.println("Kafka transaction event received: " + message);
+        System.out.println("Kafka transaction event received: " + event);
 
-        try {
+        AccountEntity account = accountRepository.findByAccountNumber(event.getAccountNumber())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
 
-            String[] data = message.split(",");
+        TransactionEntity tx = new TransactionEntity();
+        tx.setAccount(account);
+        tx.setAmount(event.getAmount());
+        tx.setType(event.getType());
+        tx.setTransactionDate(LocalDateTime.now());
 
-            Long accountNumber = Long.parseLong(data[0]);
-            Double amount = Double.parseDouble(data[1]);
-            String type = data[2];
+        transactionRepository.save(tx);
 
-            AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
-                    .orElseThrow(() -> new RuntimeException("Account not found"));
-
-            //save transaction
-
-            TransactionEntity tx = new TransactionEntity();
-            tx.setAccount(account);
-            tx.setAmount(amount);
-            tx.setType(type);
-            tx.setTransactionDate(LocalDateTime.now());
-
-            transactionRepository.save(tx);
-
-            System.out.println("Transaction stored successfully");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("Transaction stored successfully");
     }
 }
