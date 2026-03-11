@@ -39,6 +39,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity createUser(UserEntity user) {
 
+        if(userRepository.existsByUsername(user.getUsername())){
+            throw new RuntimeException("Username already exists");
+        }
+
+        if(userRepository.existsByEmail(user.getEmail())){
+            throw new RuntimeException("Email already exists");
+        }
+
 
         RoleEntity role = roleRepository
                 .findByRoleName(RoleType.ROLE_USER)
@@ -54,6 +62,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity createEmployee(UserEntity user) {
+
+
+        if(userRepository.existsByUsername(user.getUsername())){
+            throw new RuntimeException("Username already exists");
+        }
+
+        if(userRepository.existsByEmail(user.getEmail())){
+            throw new RuntimeException("Email already exists");
+        }
+
 
         RoleEntity role = roleRepository
                 .findByRoleName(RoleType.ROLE_EMPLOYEE)
